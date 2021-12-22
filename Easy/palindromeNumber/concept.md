@@ -1,1 +1,1 @@
-Easy maths!
+Reverse the number and compare!
