@@ -1,9 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-
-using namespace std;
-
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -14,51 +8,73 @@ using namespace std;
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-
-// Basic structure of linked list.
-
-class ListNode {
-    public:
-    int val;
-    ListNode *next;
-
-    ListNode(int data){
-        val = data;
-        next = NULL;
-    }
-};
-
-// O(n) where n is the length of larger linked list.
 class Solution {
 public:
-ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        int num1=0, num2=0;
-        ListNode *temp1 = l1, *temp2 = l2, *out = NULL, *tempout = NULL;
-        int carry=0;
-        
-        while(temp1!=NULL || temp2!=NULL || carry){
-            int ad = 0;
-            if(temp1!=NULL){
-                ad += temp1->val;
-                temp1 = temp1->next;
-            }
-            if(temp2!=NULL){
-                ad += temp2->val;
-                temp2 = temp2->next;
-            }
-            ad += carry;
-            int dig = ad%10;
-            carry = ad/10;
-             
-            if(out==NULL){
-                out = new ListNode(dig);
-                tempout = out;
-            }
-            else{
-               tempout->next =  new ListNode(dig);
-                tempout = tempout->next;
-            } 
-        }
-        return out;
+  ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+    int carry = 0;
+    string str;
+    ListNode *h1 = l1;
+    ListNode *h2 = l2;
+
+    while (h1 != NULL && h2 != NULL) {
+      int s = h1->val + h2->val + carry;
+      if (s >= 10) {
+        carry = 1;
+        s = s % 10;
+      } else {
+        carry = 0;
+      }
+
+      str.append(to_string(s));
+
+      h1 = h1->next;
+      h2 = h2->next;
     }
+
+    while (h1 != NULL) {
+      int s = h1->val + carry;
+      if (s >= 10) {
+        carry = 1;
+        s = s % 10;
+      } else {
+        carry = 0;
+      }
+
+      str.append(to_string(s));
+      h1 = h1->next;
+    }
+
+    while (h2 != NULL) {
+      int s = h2->val + carry;
+      if (s >= 10) {
+        carry = 1;
+        s = s % 10;
+      } else {
+        carry = 0;
+      }
+
+      str.append(to_string(s));
+      h2 = h2->next;
+    }
+
+    if (carry == 1) {
+      str.append(to_string(carry));
+      carry = 0;
+    }
+
+    ListNode *ans = NULL;
+    ListNode *tra = NULL;
+
+    for (auto i : str) {
+      if (ans == NULL) {
+        ans = new ListNode(i - '0');
+        tra = ans;
+      } else {
+        tra->next = new ListNode(i - '0');
+        tra = tra->next;
+      }
+    }
+
+    return ans;
+  }
 };
